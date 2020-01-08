@@ -1,0 +1,88 @@
+# TP3 : manipulation de fichiers
+
+Le dossier de travail du TP est le dossier `local` créé précédemment.
+
+## État du "working tree"
+
+Vérifier que Git ne détecte aucun changement à committer avec la commande `git status`.
+
+## Créer un fichier
+
+Créer un fichier quelconque avec du contenu.
+
+Vous pouvez par ex. utiliser la commande `nano mon_fichier`.
+
+`git status` doit maintenant afficher un fichier "untracked".
+
+## Commit du fichier
+
+- Ajouter le fichier à l'index
+- Vérifier que le fichier est bien dans l'index
+- Committer le fichier
+
+## Manipulation de la commande reset
+
+### Modifier et committer
+
+- Apporter une modification quelconque au fichier
+- Vérifier le statut : il doit indiquer un fichier modifié
+- Committer la modification avec une seule commande
+- Afficher l'historique : il doit afficher 2 commits
+
+### Annulation "soft"
+
+- Replacer HEAD au commit précédent, sans modifier l'index ni le dossier de travail
+- Vérifier que Git voit un fichier modifié et que la modification est dans l'index
+- Afficher le log : il doit afficher 1 seul commit
+- Restaurer le commit annulé
+  - Trouver le commit annulé avec `reflog`
+  - Repositionner HEAD sur ce commit
+- Vérifier qu'il n'y a plus de changement détecté
+- Afficher l'historique : il doit afficher 2 commits
+
+### Annulation "hard"
+
+- Remettre HEAD, l'index et le dossier de travail à l'état du premier commit
+- Vérifier le statut : il doit n'y avoir aucun changement détecté
+- Afficher le log : il doit afficher 1 seul commit
+- Restaurer le commit annulé
+- Afficher le log : il doit afficher les 2 commits
+
+### Squash des commits
+
+Le but est de fusionner les commits.
+
+- Remettre HEAD sur le 1er commit
+- Vérifier que Git voit un fichier modifié qui est déjà dans l'index
+- Vérifier que l'historique contient une seule entrée
+- Modifier le commit restant avec les modifications stockées dans l'index
+
+## Renommage/déplacement
+
+- Renommer ou déplacer le fichier avec la commande git appropriée
+- Vérifier le statut : il doit y avoir un fichier déplacé
+- Committer et vérifier l'historique
+
+## Suppression
+
+- Supprimer le fichier avec la commande Git appropriée
+- Vérifier le statut : il doit y avoir un fichier supprimé
+- Committer et vérifier l'historique
+
+## Subtilité de la staging area
+
+- Committer un fichier ou revenir au commit précédent
+- Modifier le fichier et l'ajouter à l'index
+- Modifier encore le fichier
+- Regarder le statut
+
+## Restaurer un fichier
+
+- Ajouter un fichier
+- Committer le 1er fichier modifié avec le 2e fichier
+- Modifier l'un des fichiers, puis le restaurer à la dernière version committée.
+
+## Bonus : learngitbranching
+
+- Faire le 1er exercice du 1er niveau de [learngitbranching](https://learngitbranching.js.org/).
+- Faire le 2 exercice du 2e niveau.

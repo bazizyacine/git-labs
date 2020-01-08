@@ -1,0 +1,76 @@
+# TP4 : branches
+
+## Création d'une première branche
+
+- Depuis la branche principale, créer une branche "branche1"
+- Y faire une modification (sur un des fichiers), puis committer cette modification
+- Afficher l'historique de cette branche et master avec une seule commande
+- Retourner sur la branche principale
+
+## Création d'une deuxième branche
+
+- Se placer à nouveau sur la branche master.
+- Créer une autre branche "branche2".
+- Y faire une autre modification (autre fichier ou autre ligne), puis committer cette modification.
+- Retourner sur la branche principale.
+
+## Comparaison des changements
+
+Deux méthodes de comparaison
+
+- Repérer les changements entre les branches via Tortoise : clic droit > `Tortoise Git` > `Browse refs`, puis sélectionner les branches, puis clic droit > `Compare selected refs`.
+- Éventuellement, faire la même opération avec ligne de commande.
+
+## Fusion sans conflit
+
+- Fusionner branche1 et branche2 dans master. Il ne devrait pas y avoir de conflits.
+- Afficher l'historique des 3 dernières versions de master.
+- Remettre master à l'état d'avant la fusion.
+- Refaire la fusion en évitant le fast-forward.
+- Afficher l'historique et remarquer la différence par rapport à la fusion précédente.
+
+## Fusion avec conflit
+
+- Supprimer les branches branche1 et branche2, puis les re-créer.
+- Recommencer tout le processus, en modifiant le même fichier sur la même ligne dans les 2 branches.
+- Résoudre le conflit.
+
+## Le rebase
+
+Supprimer les branches branche1 et branche2
+
+### Création d'une première branche
+
+- Depuis la branche principale, créer une branche "bug".
+- Y faire une modification (sur un des fichiers), puis committer cette modification.
+- Retourner sur la branche principale.
+
+### Création d'une deuxième branche
+
+- Depuis la branche principale, créer une autre branche "evo".
+- Y faire une autre modification (autre fichier ou autre ligne), puis committer cette modification.
+- Retourner sur la branche principale.
+
+### Merge avec rebase 
+
+- Merger bug dans master
+- Rebaser evo sur master
+- Merger evo dans master
+
+## Bonus : rebase intéractif
+
+Créer quelques commits :
+- Créer 2 commits "WIP"
+- Créer un nouveau fichier et le committer
+- Supprimer le fichier et committer
+- Créer un nouveau commit avec message bidon
+
+Ré-écrire l'historique :
+- Fusionner les WIP en un seul commit
+- Supprimer les 2 commits qui ne servent à rien
+- Corriger le message bidon
+
+## Bonus 2 : learngitbranching
+
+- Finir le niveau 1.
+- Finir le niveau 2.

@@ -1,0 +1,54 @@
+# TP2 : initialisation d'un dépôt git
+
+Au cours des TPs, nous utiliserons deux dépôts Git sur le poste de travail :
+- un dépôt qui fera office de "remote"
+- un dépôt sur lequel nous travaillerons.
+
+## Structure de dossier
+
+Voici la structure de dossier que nous devrons avoir :
+```text
+formation-git/
+	local/
+		.git/
+	distant/
+		config
+		description
+		HEAD
+		hooks/
+		info/
+		objects/
+		refs/
+```
+
+## Initialisation des dépôts
+
+### distant
+
+Créer le dépôt nu et s'assurer qu'il contient bien les fichiers attendus.
+
+- Se placer dans le dossier `formation-git` (commande `cd`)
+- Initialiser un dépôt nu (option `--bare`, nom du dépôt en paramètre)
+- Lister tous les fichiers (commande `ls`)et s'assurer que le listing ressemble bien à :
+```console
+$ ls
+HEAD        config      description hooks       info        objects     refs
+```
+
+### local
+
+- Se placer dans le dossier `formation-git`
+- Cloner le dépôt remote vers un dossier `local` : `git clone <url> <dossier>`. Le protocole utilisé est `file://`. L'URL à utiliser ressemble à `file:///c/projects/formation-git/distant`. Utiliser la complétion de la ligne de commande pour écrire rapidement le chemin. Attention, pas de `/` à la fin de l'URL.
+- Vérifier que le dossier `.git` existe. La commande `ls` considère comme cachés les fichiers préfixés par `.`. Pour voir le `.git` utiliser l'option `-a` ("all").
+- Lister les "remotes" du dépôt `local` afin de vérifier que le dépôt `distant` est bien un "remote", nommé "origin" :
+```sh
+git remote -v
+```
+
+## Interface graphique
+
+Tortoise Git doit maintenant reconnaître le dossier `local` comme un projet Git.
+- Vérifier dans l'explorateur le statut du dossier `local` : une icône verte doit apparaître.
+- Le menu contextuel sur le dossier doit maintenant contenir des actions Tortoise Git. Consulter l'historique du dépôt (log)
+
+Le dossier `local` peut être ouvert avec GitHub Desktop, SourceTree ou autre.

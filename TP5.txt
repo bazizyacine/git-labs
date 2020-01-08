@@ -1,0 +1,47 @@
+# TP5 : synchronisation avec le distant
+
+## Clone
+
+Cloner une nouvelle fois le dépôt `distant`.
+
+## Push
+
+Depuis le premier dépôt `local`, envoyer les modifications de la branche master sur le dépot origin.
+
+## Pull
+
+Dans le 2e dépôt local, récupérer les modifications de la branche master.
+
+## Upstream
+
+- Dans le 1er local, créer une nouvelle branche et l'envoyer sur origin en configurant le suivi de branche.
+- Créer un nouveau commit et vérifier que `git push` fonctionne sans argument.
+
+## Fetch
+
+Dans le 2e local, mettre à jour toutes les références remote et lister la nouvelle branche.
+
+## Réinitialisation
+
+Dans le 1er local :
+- revenir sur master
+- faire un commit
+- réinitialiser la branche master locale à l'état du dépôt origin
+
+## Conflit
+
+- Créer un commit sur le master du 1er dépôt et le pusher.
+- Dans le 2e dépôt:
+  - Créer un commit sur master qui entre en conflit avec le commit précédemment créé.
+  - Mettre à jour la branche en se rebasant sur le remote et résoudre le conflit
+
+# Stash
+
+- Pusher un nouveau commit depuis le 1er dépôt
+- Dans le 2e dépôt:
+  - modifier le même fichier sans le committer
+  - mettre à jour la branche depuis le distant : utiliser la stash pour mettre les modifications de côté puis les restaurer
+
+## Bonus : gitlearngitbranching
+
+Avancer sur gitlearngitbranching.

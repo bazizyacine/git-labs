@@ -1,0 +1,124 @@
+# TP1 : Installation et configuration de GIT
+
+## Installation d'un éditeur de texte
+
+Git utilise un éditeur de texte pour permettre, entre autres, l'édition des messages de commit. Pour le choix de cet éditeur, il est conseillé un éditeur supportant l'édition multi-ligne et s'ouvrant rapidement.
+
+Nous utiliserons pour les TPs [Notepad++](https://notepad-plus-plus.org/download) (version 32 bits) qui est le choix proposé par défaut par l'installateur de Git.
+
+
+## Installation de Git
+
+Git est certainement installé sur votre poste. Vérifier que vous avez une version à jour (>= 2.19.1) avec `git --version`.
+
+Si besoin réinstaller Git depuis [git-scm.com](https://git-scm.com/download/win). Avant de réinstaller, notez la valeur renvoyée par `git config --global core.autocrlf`.
+
+Lors de l'installation :
+- garder la configuration de l'éditeur sur Notepad++
+- lors de "Adjusting your PATH environment", garder "Use Git from Git Bash only" à moins que vous souhaitiez pouvoir utiliser depuis la ligne de commande standard (CMD ou PowerShell). Dans ce cas, choisir l'option "Use Git from the Windows Command Prompt"
+- Pour le reste, garder les options par défaut.
+
+
+## Installation d'un outil graphique
+
+### Tortoise Git
+Tortoise Git nous permet de réaliser toutes les opération Git depuis l'explorateur de fichiers. Il offre notamment une interface de résolution de conflit confortable et est indépendant de l'outil de développement.
+
+Installer Tortoise depuis [tortoisegit.org](https://tortoisegit.org/).
+
+### GitHub Desktop
+
+GitHub Desktop est un autre outil graphique qui affiche sa propre fenêtre.
+
+https://desktop.github.com/
+
+
+## Configuration de Git
+
+### Éditeur de texte
+
+Vérifier que Notepad++ est bien l'éditeur de Git :
+```sh
+git config --get core.editor
+```
+
+Si ce n'est pas le cas ajuster le avec :
+```sh
+git config --global core.editor "'C:/Program Files (x86)/Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin"
+```
+
+Vérifier que l'éditeur est bien configuré et se lance. La commande suivante devrait lancer Notepad++, en ouvrant votre fichier .gitconfig :
+```sh
+git config --global --edit
+```
+
+### Autres réglages
+
+Maintenant que l'éditeur est configuré, on peut utiliser `git config --global --edit` pour vérifier/configurer le reste.
+
+#### Identité
+
+Vérifier le bon réglage de votre identité dans la section `[user]` (nom et email).
+
+
+#### `autocrlf`
+
+Assurez-vous d'avoir tous avoir la même valeur pour le paramètre de configuration `autocrlf`, dans la section `[core]`.
+
+Sur Windows cette valeur est soit :
+- `true`, valeur par défaut. Les retours à la ligne sont écrits dans Git avec LF et dans votre dossier de travail avec CRLF (séparateur natif de Windows).
+- `false`. Git ne changera pas vos retours à la ligne. Il faut alors être sûr que tout le monde utilise les même séparateurs de ligne.
+
+
+#### `difftool` et `mergetool`
+
+Configurer Git pour qu'il utilise les outils de "diff" et "merge" de Tortoise. Git lancera ses outils lorsque vous passerez par la ligne de commande pour voir les différences ou résoudre un conflit. Cela ne changera pas le comportement de vos outils de développement qui peuvent proposer le "diff" et le "merge".
+
+Pour cela, ajouter les lignes suivantes dans le fichier de configuration :
+```ini
+[diff]
+	tool = tortoisediff
+[difftool]
+	prompt = false
+[difftool "tortoisediff"]
+	cmd = 'c:/Program Files/TortoiseGIT/bin/TortoiseGitMerge.exe' \
+		-mine "$REMOTE" -base "$LOCAL"
+[merge]
+	tool = tortoisemerge
+[mergetool]
+	prompt = false
+	keepBackup = false
+[mergetool "tortoisemerge"]
+	cmd = 'c:/Program Files/TortoiseGIT/bin/TortoiseGitMerge.exe' \
+		-base "$BASE" -theirs "$REMOTE" -mine "$LOCAL" -merged "$MERGED"
+```
+
+### Aliases
+
+#### Aliases Git
+
+- Ajouter un alias `st` qui permet de raccourcir la commande `git status`. Pour cela :
+```sh
+git config --global alias.st 'status'
+```
+- Éditer le fichier de config pour ajouter l'alias `co` pour `checkout`.
+- Chercher sur Google `git hist` et rajouter cet alias
+- Tester les aliases
+
+#### Aliases Bash
+
+On peut rajouter des aliases directement au niveau de Bash (en dehors de la commande `git`).
+Par exemple pour définir un alias `cdp` qui va dans le dossier de mon projet en cours :
+```sh
+alias cdp='cd /d/projects/projetA'
+```
+
+Éditer le fichier `~/.bashrc` et ajouter les aliases suivants :
+- un alias nommé 'gs' qui lance 'git status'
+- un alias nommé 'gh' qui lance `git hist`
+- un alias nommé 'h' qui lance `git hist -n 10'
+
+`.bashrc` est évalué à chaque lancement de Git Bash. Pour que Bash évalue le `.bashrc` sans relancer la console, on peut émettre la commande suivante :
+```sh
+source ~/.bashrc
+```
