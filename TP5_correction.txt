@@ -1,0 +1,140 @@
+fetch  https://git-scm.com/book/fr/v2/Les-branches-avec-Git-Branches-de-suivi-à-distance
+
+# TP5 : synchronisation avec le distant
+
+## Clone
+
+Cloner une nouvelle fois le dépôt `distant`.
+
+git clone file:///Users/raedlakoud/Desktop/Formation_GIT/Initation/formation-v2-GIT/distant local2
+## Push
+
+Depuis le premier dépôt `local`, envoyer les modifications de la branche master sur le dépot origin.
+git push origin master
+
+## Pull
+
+Dans le 2e dépôt local, récupérer les modifications de la branche master.
+git pull origin master
+
+## Upstream
+
+- Dans le 1er local, créer une nouvelle branche et l'envoyer sur origin en configurant le suivi de branche.
+git checkout -b ma_branche_de_developpement
+git push -u origin ma_branche_de_developpement
+
+- Créer un nouveau commit et vérifier que `git push` fonctionne sans argument.
+touch <nom_fichier>
+git add <nom_fichier>
+git commit -m "message"
+git push
+
+## Fetch
+
+Dans le 2e local, mettre à jour toutes les références remote et lister la nouvelle branche.
+git remote update --prune  (git fetch remote)
+
+
+## Réinitialisation
+
+Dans le 1er local :
+- revenir sur master
+git checkout master
+- faire un commit
+> changer un fichier
+git add <nom_fichier>
+git commit -m "message"
+
+
+- réinitialiser la branche master locale à l'état du dépôt origin
+
+* [2020-01-09] [3272740] | add line from master for reinitialisation second chance {{raed}}  (HEAD -> master)
+* [2020-01-09] [4fd41a9] | add line from master for reinitialisation {{raed}}  (origin/master)
+* [2020-01-09] [9cfe8b8] | file added in master {{raed}} 
+*   [2020-01-09] [465622d] | Merge branch 'evo' after rebase {{raed}} 
+|\  
+| * [2020-01-09] [bb15eb2] | add an evolution from evo branch {{raed}}  (evo)
+* |   [2020-01-09] [7713a33] | conflict resolved {{raed}} 
+|\ \  
+| * | [2020-01-08] [d33449f] | bug add from branch bug@ {{raed}}  (bug)
+* | | [2020-01-09] [f7a4598] | add file as evolution {{raed}}  (a)
+| |/  
+|/|   
+* | [2020-01-08] [8fab7e3] | add line as bug from master {{raed}} 
+|/  
+*   [2020-01-08] [81b2c5c] | commit conflict correction {{raed}} 
+|\  
+| * [2020-01-08] [aad2689] | file modified in branche 2 {{raed}} 
+* | [2020-01-08] [e27a603] | file modified in branche1 {{raed}} 
+|/  
+* [2020-01-08] [037d214] | first commit in master {{raed}} 
+
+
+git fetch origin
+git reset --hard origin/master
+
+
+Raeds-MacBook-Pro:local raedlakoud$ git reset --hard origin/master
+HEAD is now at 4fd41a9 add line from master for reinitialisation
+Raeds-MacBook-Pro:local raedlakoud$ git hist
+* [2020-01-09] [4fd41a9] | add line from master for reinitialisation {{raed}}  (HEAD -> master, origin/master)
+* [2020-01-09] [9cfe8b8] | file added in master {{raed}} 
+*   [2020-01-09] [465622d] | Merge branch 'evo' after rebase {{raed}} 
+|\  
+| * [2020-01-09] [bb15eb2] | add an evolution from evo branch {{raed}}  (evo)
+* |   [2020-01-09] [7713a33] | conflict resolved {{raed}} 
+|\ \  
+| * | [2020-01-08] [d33449f] | bug add from branch bug@ {{raed}}  (bug)
+* | | [2020-01-09] [f7a4598] | add file as evolution {{raed}}  (a)
+| |/  
+|/|   
+* | [2020-01-08] [8fab7e3] | add line as bug from master {{raed}} 
+|/  
+*   [2020-01-08] [81b2c5c] | commit conflict correction {{raed}} 
+|\  
+| * [2020-01-08] [aad2689] | file modified in branche 2 {{raed}} 
+* | [2020-01-08] [e27a603] | file modified in branche1 {{raed}} 
+|/  
+* [2020-01-08] [037d214] | first commit in master {{raed}} 
+
+
+
+## Conflit
+
+- Créer un commit sur le master du 1er dépôt et le pusher.
+touch <nom_fichier>
+git add <nom_fichier>
+git commit -m "message"
+git push
+
+- Dans le 2e dépôt:
+  - Créer un commit sur master qui entre en conflit avec le commit précédemment créé.
+  - Mettre à jour la branche en se rebasant sur le remote et résoudre le conflit
+
+git fetch origin
+git rev-list --left-right --count HEAD upstream/master
+git rebase origin/master
+
+git add conflicting_file_1.txt
+git rebase --continue
+
+# Stash
+
+- Pusher un nouveau commit depuis le 1er dépôt
+touch <nom_fichier>
+git add <nom_fichier>
+git commit -m "message"
+git push
+
+- Dans le 2e dépôt:
+  - modifier le même fichier sans le committer
+  touch <nom_fichier>
+
+  - mettre à jour la branche depuis le distant : utiliser la stash pour mettre les modifications de côté puis les restaurer
+git stash 
+git pull --rebase
+git stash pop
+
+## Bonus : gitlearngitbranching
+
+Avancer sur gitlearngitbranching.

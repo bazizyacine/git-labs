@@ -1,0 +1,333 @@
+git config --global alias.hist "log --pretty=format:'%C(yellow)[%ad]%C(reset) %C(green)[%h]%C(reset) | %C(red)%s %C(bold red){{%an}}%C(reset) %C(blue)%d%C(reset)' --graph --date=short"
+
+# TP4 : branches
+
+## Création d'une première branche
+
+- Depuis la branche principale, créer une branche "branche1"
+git branch branche1
+
+- Y faire une modification (sur un des fichiers), puis committer cette modification
+git commit -a -m "commit in branch1"
+- Afficher l'historique de cette branche et master avec une seule commande
+git reflog
+- Retourner sur la branche principale
+git checkout master
+
+## Création d'une deuxième branche
+
+- Se placer à nouveau sur la branche master.
+- Créer une autre branche "branche2".
+git branch branche2
+- Y faire une autre modification (autre fichier ou autre ligne), puis committer cette modification.
+- Retourner sur la branche principale.
+git checkout master
+
+## Comparaison des changements
+
+Deux méthodes de comparaison
+
+- Repérer les changements entre les branches via Tortoise : clic droit > `Tortoise Git` > `Browse refs`, puis sélectionner les branches, puis clic droit > `Compare selected refs`.
+- Éventuellement, faire la même opération avec ligne de commande.
+git diff branche1 branche2
+
+## Fusion sans conflit
+
+- Fusionner branche1 et branche2 dans master. Il ne devrait pas y avoir de conflits.
+git checkout master
+git merge branche1
+git merge branche2
+
+- Afficher l'historique des 3 dernières versions de master.
+git log --oneline -n 3
+- Remettre master à l'état d'avant la fusion.
+git hist
+> identifier le noeud avant les merges
+git reset --hard sha1
+
+- Refaire la fusion en évitant le fast-forward.
+git checkout master
+git merge --no-ff branche1
+git merge --no-ff branche2
+
+
+
+
+
+- Afficher l'historique et remarquer la différence par rapport à la fusion précédente.
+git log --oneline
+> Un merge commit est toujours crée avec l'option --no-ff.
+
+## Fusion avec conflit
+
+- Supprimer les branches branche1 et branche2, puis les re-créer.
+git branch -D branche1
+
+- Recommencer tout le processus, en modifiant le même fichier sur la même ligne dans les 2 branches.
+- Résoudre le conflit.
+> Vous allez  voir les différences de contenu du fichier entre les deux branches, et vous pouvez choisir quel contenu garder pour la branche dans laquelle vous faites le merge.
+> Sauvegarder le fichier et revenir dans la console.
+> Maintenant que vous avez résolu le conflit, si vous faites un git status, git vous dira que vous avez des branches non fusionnées ("unmerged paths"). 
+
+vi monfichier
+> résoudre le conflit
+
+git commit
+error: Merging is not possible because you have unmerged files.
+
+git merge branche2
+error: you need to resolve your current index first
+
+git add monfichier
+ git commit -m "commit conflict correction"
+git merge branche2
+
+git hist
+
+
+
+## Le rebase
+
+Supprimer les branches branche1 et branche2
+git branch -D branche1
+git branch -D branche2
+
+### Création d'une première branche
+
+- Depuis la branche principale, créer une branche "bug".
+git branch bug
+git checkout bug
+
+- Y faire une modification (sur un des fichiers), puis committer cette modification.
+> éditer le fichier et faire une modification
+
+git add <nom_fichier>
+git commit -m "messge"
+
+- Retourner sur la branche principale.
+git checkout master
+
+### Création d'une deuxième branche
+
+- Depuis la branche principale, créer une autre branche "evo".
+git branch ego
+git checkout bug
+
+- Y faire une autre modification (autre fichier ou autre ligne), puis committer cette modification.
+> éditer le fichier et faire une modification
+git add <nom_fichier>
+git commit -m "messge"
+
+- Retourner sur la branche principale.
+git checkout master
+
+### Merge avec rebase 
+
+- Merger bug dans master
+git checkout master
+git merge bug
+
+
+
+- Rebaser evo sur master
+git rebase --onto master evo
+
+- Merger evo dans master
+git merge evo
+
+*   [2020-01-09] [465622d] | Merge branch 'evo' after rebase {{raed}}  (HEAD -> master)
+|\  
+| * [2020-01-09] [bb15eb2] | add an evolution from evo branch {{raed}}  (evo)
+* |   [2020-01-09] [7713a33] | conflict resolved {{raed}} 
+|\ \  
+| * | [2020-01-08] [d33449f] | bug add from branch bug@ {{raed}}  (bug)
+* | | [2020-01-09] [f7a4598] | add file as evolution {{raed}}  (a)
+| |/  
+|/|   
+* | [2020-01-08] [8fab7e3] | add line as bug from master {{raed}} 
+|/  
+*   [2020-01-08] [81b2c5c] | commit conflict correction {{raed}} 
+|\  
+| * [2020-01-08] [aad2689] | file modified in branche 2 {{raed}} 
+* | [2020-01-08] [e27a603] | file modified in branche1 {{raed}} 
+|/  
+* [2020-01-08] [037d214] | first commit in master {{raed}} 
+
+
+
+faire évoluer master
+
+* [2020-01-09] [9cfe8b8] | file added in master {{raed}}  (HEAD -> master)
+*   [2020-01-09] [465622d] | Merge branch 'evo' after rebase {{raed}} 
+|\  
+| * [2020-01-09] [bb15eb2] | add an evolution from evo branch {{raed}}  (evo)
+* |   [2020-01-09] [7713a33] | conflict resolved {{raed}} 
+|\ \  
+| * | [2020-01-08] [d33449f] | bug add from branch bug@ {{raed}}  (bug)
+* | | [2020-01-09] [f7a4598] | add file as evolution {{raed}}  (a)
+| |/  
+|/|   
+* | [2020-01-08] [8fab7e3] | add line as bug from master {{raed}} 
+|/  
+*   [2020-01-08] [81b2c5c] | commit conflict correction {{raed}} 
+|\  
+| * [2020-01-08] [aad2689] | file modified in branche 2 {{raed}} 
+* | [2020-01-08] [e27a603] | file modified in branche1 {{raed}} 
+|/  
+* [2020-01-08] [037d214] | first commit in master {{raed}} 
+
+
+
+faire évoluer evo2
+
+* [2020-01-09] [3d17439] | evolution add in evo2 {{raed}}  (HEAD -> evo2)
+*   [2020-01-09] [465622d] | Merge branch 'evo' after rebase {{raed}} 
+|\  
+| * [2020-01-09] [bb15eb2] | add an evolution from evo branch {{raed}}  (evo)
+* |   [2020-01-09] [7713a33] | conflict resolved {{raed}} 
+|\ \  
+| * | [2020-01-08] [d33449f] | bug add from branch bug@ {{raed}}  (bug)
+* | | [2020-01-09] [f7a4598] | add file as evolution {{raed}}  (a)
+| |/  
+|/|   
+* | [2020-01-08] [8fab7e3] | add line as bug from master {{raed}} 
+|/  
+*   [2020-01-08] [81b2c5c] | commit conflict correction {{raed}} 
+|\  
+| * [2020-01-08] [aad2689] | file modified in branche 2 {{raed}} 
+* | [2020-01-08] [e27a603] | file modified in branche1 {{raed}} 
+|/  
+* [2020-01-08] [037d214] | first commit in master {{raed}}
+
+
+git checkout evo2
+git rebase master
+
+
+
+* [2020-01-09] [3ded6ed] | evolution add in evo2 {{raed}}  (HEAD -> evo2)
+* [2020-01-09] [9cfe8b8] | file added in master {{raed}}  (master)
+*   [2020-01-09] [465622d] | Merge branch 'evo' after rebase {{raed}} 
+|\  
+| * [2020-01-09] [bb15eb2] | add an evolution from evo branch {{raed}}  (evo)
+* |   [2020-01-09] [7713a33] | conflict resolved {{raed}} 
+|\ \  
+| * | [2020-01-08] [d33449f] | bug add from branch bug@ {{raed}}  (bug)
+* | | [2020-01-09] [f7a4598] | add file as evolution {{raed}}  (a)
+| |/  
+|/|   
+* | [2020-01-08] [8fab7e3] | add line as bug from master {{raed}} 
+|/  
+*   [2020-01-08] [81b2c5c] | commit conflict correction {{raed}} 
+|\  
+| * [2020-01-08] [aad2689] | file modified in branche 2 {{raed}} 
+* | [2020-01-08] [e27a603] | file modified in branche1 {{raed}} 
+|/  
+* [2020-01-08] [037d214] | first commit in master {{raed}}  
+
+## Bonus : rebase intéractif
+
+Créer quelques commits :
+- Créer 2 commits "WIP"
+> faire un 1er changement
+git add <nom_fichier>
+git commit -m "WIP1"
+
+> faire un 2ème changement
+git add <nom_fichier>
+git commit -m "WIP2"
+
+- Créer un nouveau fichier et le committer
+touch nouveauFichier
+git add nouveauFichier
+git commit -m "add a new file"
+
+- Supprimer le fichier et committer
+rm nouveauFichier
+git rm nouveauFichier
+git commit -m "delete file"
+
+- Créer un nouveau commit avec message bidon
+touch anotherFile
+git add anotherFile
+git commit -m "bidon"
+
+
+
+Raeds-MBP:local raedlakoud$ git hist
+* [2020-01-09] [d7e6a01] | bidon {{raed}}  (HEAD -> evo2)
+* [2020-01-09] [db23902] | delete file {{raed}} 
+* [2020-01-09] [dcbd2fb] | add a new file {{raed}} 
+* [2020-01-09] [8704e22] | WIP2 {{raed}} 
+* [2020-01-09] [76a3096] | WIP1 {{raed}} 
+* [2020-01-09] [3ded6ed] | evolution add in evo2 {{raed}} 
+* [2020-01-09] [9cfe8b8] | file added in master {{raed}}  (master)
+*   [2020-01-09] [465622d] | Merge branch 'evo' after rebase {{raed}} 
+|\  
+| * [2020-01-09] [bb15eb2] | add an evolution from evo branch {{raed}}  (evo)
+* |   [2020-01-09] [7713a33] | conflict resolved {{raed}} 
+|\ \  
+| * | [2020-01-08] [d33449f] | bug add from branch bug@ {{raed}}  (bug)
+* | | [2020-01-09] [f7a4598] | add file as evolution {{raed}}  (a)
+| |/  
+|/|   
+* | [2020-01-08] [8fab7e3] | add line as bug from master {{raed}} 
+|/  
+*   [2020-01-08] [81b2c5c] | commit conflict correction {{raed}} 
+|\  
+| * [2020-01-08] [aad2689] | file modified in branche 2 {{raed}} 
+* | [2020-01-08] [e27a603] | file modified in branche1 {{raed}} 
+|/  
+* [2020-01-08] [037d214] | first commit in master {{raed}} 
+
+
+
+Ré-écrire l'historique :
+- Fusionner les WIP en un seul commit
+git rebase -i 3ded6ed
+
+- Supprimer les 2 commits qui ne servent à rien
+> Conserver le premier commit du bas ( as pick) et remplacer le reste du `pick` en `squash`
+> Une fois votre rebase réussie
+git hist
+
+
+
+
+Raeds-MBP:local raedlakoud$ git hist
+* [2020-01-09] [863de44] | delete file {{raed}}  (HEAD -> evo2)
+* [2020-01-09] [45112d2] | this is a modification of the bidon message {{raed}} 
+* [2020-01-09] [50fd51b] | add a new file {{raed}} 
+* [2020-01-09] [7f1bb4a] | WIP1 {{raed}} 
+* [2020-01-09] [3ded6ed] | evolution add in evo2 {{raed}} 
+* [2020-01-09] [9cfe8b8] | file added in master {{raed}}  (master)
+*   [2020-01-09] [465622d] | Merge branch 'evo' after rebase {{raed}} 
+|\  
+| * [2020-01-09] [bb15eb2] | add an evolution from evo branch {{raed}}  (evo)
+* |   [2020-01-09] [7713a33] | conflict resolved {{raed}} 
+|\ \  
+| * | [2020-01-08] [d33449f] | bug add from branch bug@ {{raed}}  (bug)
+* | | [2020-01-09] [f7a4598] | add file as evolution {{raed}}  (a)
+| |/  
+|/|   
+* | [2020-01-08] [8fab7e3] | add line as bug from master {{raed}} 
+|/  
+*   [2020-01-08] [81b2c5c] | commit conflict correction {{raed}} 
+|\  
+| * [2020-01-08] [aad2689] | file modified in branche 2 {{raed}} 
+* | [2020-01-08] [e27a603] | file modified in branche1 {{raed}} 
+|/  
+* [2020-01-08] [037d214] | first commit in master {{raed}} 
+
+
+
+
+> Vous pouvez voir tous vos commits "squashe" en un seul commit.
+
+- Corriger le message bidon
+git commit --amend
+
+## Bonus 2 : learngitbranching
+
+- Finir le niveau 1.
+- Finir le niveau 2.
